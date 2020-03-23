@@ -204,6 +204,14 @@ resource "aws_iam_role" "instance_role" {
   }
 }
 
+# Allow SSM access to this instance
+# Taken from this link
+# https://stackoverflow.com/questions/45002292/terraform-correct-way-to-attach-aws-managed-policies-to-a-role
+resource "aws_iam_role_policy_attachment" "ssm" {
+  role       = "${aws_iam_role.instance_role[0].name}"
+  policy_arn = "${var.arn_format}:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
 data "aws_iam_policy_document" "instance_role" {
   statement {
     effect  = "Allow"
